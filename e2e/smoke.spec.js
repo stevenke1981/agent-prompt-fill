@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
 
 async function dismissUpdateDialogs(page) {
+  await page.waitForLoadState('networkidle');
   const later = page.getByRole('button', { name: /稍後再說|Later/i });
-  if (await later.isVisible().catch(() => false)) {
+  while (await later.isVisible().catch(() => false)) {
     await later.click();
   }
 }

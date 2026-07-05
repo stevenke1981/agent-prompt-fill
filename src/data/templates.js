@@ -3,7 +3,7 @@
  */
 import { withDeliverables } from '../constants/deliverables';
 
-export const SYSTEM_DATA_VERSION = '1.1.1';
+export const SYSTEM_DATA_VERSION = '1.2.0';
 
 export const TEMPLATE_TAGS = [
   'coding',
@@ -71,6 +71,7 @@ const RAW_TEMPLATES_CONFIG = [
     id: 'tpl_agent_system',
     name: { 'zh-tw': '通用 Coding Agent 系統提示', en: 'General Coding Agent System Prompt' },
     tags: ['coding'],
+    imageUrl: './template-covers/agent-system.jpg',
     language: ['zh-tw', 'en'],
     content: DEFAULT_TEMPLATE_CONTENT,
     selections: {
@@ -93,6 +94,7 @@ const RAW_TEMPLATES_CONFIG = [
     id: 'tpl_task_plan',
     name: { 'zh-tw': '任務分解與執行計畫', en: 'Task Decomposition & Execution Plan' },
     tags: ['plan'],
+    imageUrl: './template-covers/task-plan.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -148,6 +150,7 @@ Produce an execution plan for "{{task_type}}". Project: {{project_context}} ({{r
     id: 'tpl_code_review',
     name: { 'zh-tw': '程式碼審查代理', en: 'Code Review Agent' },
     tags: ['review'],
+    imageUrl: './template-covers/code-review.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -199,6 +202,7 @@ Changes must meet: {{acceptance_criteria}}`,
     id: 'tpl_bug_fix',
     name: { 'zh-tw': 'Bug 調查與修復', en: 'Bug Investigation & Fix' },
     tags: ['debug'],
+    imageUrl: './template-covers/bug-fix.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -253,6 +257,7 @@ Fix issue type: {{bug_symptom}}. Context: {{project_context}}, {{tech_stack}}.
     id: 'tpl_feature_impl',
     name: { 'zh-tw': '功能實作工作流', en: 'Feature Implementation Workflow' },
     tags: ['coding'],
+    imageUrl: './template-covers/feature-implementation.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -307,6 +312,7 @@ Implement feature. Scope: {{feature_scope}}. Stack {{tech_stack}}, {{project_con
     id: 'tpl_react_tools',
     name: { 'zh-tw': 'ReAct 工具使用模式', en: 'ReAct Tool-Use Pattern' },
     tags: ['coding'],
+    imageUrl: './template-covers/react-tools.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -363,6 +369,7 @@ Complete: {{task_type}}. Stack {{tech_stack}}.
     id: 'tpl_subagent',
     name: { 'zh-tw': '子代理委派編排', en: 'Subagent Delegation Orchestration' },
     tags: ['plan'],
+    imageUrl: './template-covers/subagent-orchestration.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -420,6 +427,7 @@ For each subagent provide:
     id: 'tpl_tdd',
     name: { 'zh-tw': '測試驅動開發代理', en: 'Test-Driven Development Agent' },
     tags: ['test'],
+    imageUrl: './template-covers/tdd.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -470,6 +478,7 @@ You are a {{agent_role}} practicing strict TDD.
     id: 'tpl_refactor',
     name: { 'zh-tw': '安全重構代理', en: 'Safe Refactoring Agent' },
     tags: ['refactor'],
+    imageUrl: './template-covers/safe-refactor.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -522,6 +531,7 @@ Goal: {{refactor_goal}}. {{project_context}}, {{tech_stack}}.
     id: 'tpl_docs',
     name: { 'zh-tw': '技術文件撰寫', en: 'Technical Documentation Agent' },
     tags: ['docs'],
+    imageUrl: './template-covers/technical-docs.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -566,6 +576,7 @@ Write {{doc_type}} for {{audience}}. Project {{project_context}}, {{tech_stack}}
     id: 'tpl_security',
     name: { 'zh-tw': '安全審計代理', en: 'Security Audit Agent' },
     tags: ['security'],
+    imageUrl: './template-covers/security-audit.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -612,6 +623,7 @@ Focus: {{security_focus}}. Threat model: {{threat_model}}, {{tech_stack}}.
     id: 'tpl_mcp',
     name: { 'zh-tw': 'MCP 工具整合提示', en: 'MCP Tool Integration Prompt' },
     tags: ['coding'],
+    imageUrl: './template-covers/mcp-integration.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -664,6 +676,7 @@ Use MCP server "{{mcp_server}}" to complete {{task_type}}.
     id: 'tpl_debug_investigate',
     name: { 'zh-tw': '根因分析與除錯', en: 'Root Cause Analysis & Debugging' },
     tags: ['debug'],
+    imageUrl: './template-covers/root-cause-debugging.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -716,6 +729,7 @@ Report as {{root_cause_format}} including:
     id: 'tpl_spec_driven',
     name: { 'zh-tw': '規格驅動開發', en: 'Spec-Driven Development' },
     tags: ['plan'],
+    imageUrl: './template-covers/spec-driven-development.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -770,6 +784,7 @@ You are a {{agent_role}} practicing Spec-Driven Development (SDD).
     id: 'tpl_design_single_agent',
     name: { 'zh-tw': '設計單一 Agent（Agentic）', en: 'Design a Single Agentic Agent' },
     tags: ['design', 'plan'],
+    imageUrl: './template-covers/single-agent-design.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -841,6 +856,7 @@ Produce a full agent spec as {{output_format}} (system prompt draft, tool list, 
     id: 'tpl_research_team',
     name: { 'zh-tw': '深度研究團隊設計', en: 'Deep Research Team Design' },
     tags: ['team', 'plan', 'design'],
+    imageUrl: './template-covers/deep-research-team.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -921,6 +937,7 @@ Strategy: {{research_strategy}}, effort: {{effort_scaling}}.
     id: 'tpl_dev_squad',
     name: { 'zh-tw': 'Agents 開發團隊設計', en: 'Agent Dev Squad Design' },
     tags: ['team', 'coding', 'design'],
+    imageUrl: './template-covers/agent-dev-squad.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -1005,6 +1022,7 @@ You are a {{orchestrator_role}} designing an **AI software dev squad** for {{tas
     id: 'tpl_novelist_crew',
     name: { 'zh-tw': '小說家寫作團隊（CrewAI 式）', en: 'Novelist Writing Crew (CrewAI Style)' },
     tags: ['team', 'creative'],
+    imageUrl: './template-covers/novelist-crew.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -1102,6 +1120,7 @@ You are an {{orchestrator_role}} running an **AI novelist writing crew** (CrewAI
     id: 'tpl_creative_studio',
     name: { 'zh-tw': '創意內容工作室團隊', en: 'Creative Content Studio Team' },
     tags: ['team', 'creative', 'plan'],
+    imageUrl: './template-covers/creative-studio.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role
@@ -1170,6 +1189,7 @@ You are a {{orchestrator_role}} running a **creative content studio** ({{team_ty
     id: 'tpl_hierarchical_team',
     name: { 'zh-tw': '層級式多代理團隊', en: 'Hierarchical Multi-Agent Team' },
     tags: ['team', 'design'],
+    imageUrl: './template-covers/hierarchical-team.jpg',
     language: ['zh-tw', 'en'],
     content: {
       'zh-tw': `### Role

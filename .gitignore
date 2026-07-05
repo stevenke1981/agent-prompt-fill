@@ -16,6 +16,7 @@ reference-prompt-autofill/
 # Cursor / IDE harness (local only)
 mcps/
 terminals/
+.codebase-memory/
 
 # Production
 dist

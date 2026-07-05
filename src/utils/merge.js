@@ -35,6 +35,15 @@ export const mergeTemplatesWithSystem = (currentTemplates, { backupSuffix }) => 
         };
       }
 
+      // 系統更新可補上預設封面，但不可覆蓋使用者替換或新增的圖片。
+      if (targetInMerged && t.imageUrl) {
+        targetInMerged.imageUrl = t.imageUrl;
+      }
+      if (targetInMerged && Array.isArray(t.imageUrls) && t.imageUrls.length > 0) {
+        targetInMerged.imageUrls = deepClone(t.imageUrls);
+        targetInMerged.imageUrl = t.imageUrl || t.imageUrls[0];
+      }
+
       if (isDifferent) {
         const backupId = makeUniqueKey(t.id, existingIds, "user");
         existingIds.add(backupId);

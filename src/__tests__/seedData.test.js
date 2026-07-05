@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import { INITIAL_TEMPLATES_CONFIG, SYSTEM_DATA_VERSION } from '../data/templates';
 import { INITIAL_BANKS, INITIAL_DEFAULTS } from '../data/banks';
@@ -11,6 +13,16 @@ describe('agent seed data', () => {
 
   it('has system data version', () => {
     expect(SYSTEM_DATA_VERSION).toBeTruthy();
+  });
+
+  it('all system templates have a bundled cover image', () => {
+    INITIAL_TEMPLATES_CONFIG.forEach((template) => {
+      expect(template.imageUrl, `Missing cover for ${template.id}`).toMatch(
+        /^\.\/template-covers\/.+\.jpg$/
+      );
+      const coverPath = resolve(process.cwd(), 'public', template.imageUrl.slice(2));
+      expect(existsSync(coverPath), `Cover file not found for ${template.id}`).toBe(true);
+    });
   });
 
   it('has at least 60 banks', () => {

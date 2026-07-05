@@ -43,6 +43,7 @@ npm run dev           # 開發伺服器 :1420
 | SD-01 | INITIAL_TEMPLATES_CONFIG.length | ≥12 |
 | SD-02 | 每模板 extractVariableKeys | 所有 key 在 banks 或 defaults |
 | SD-03 | SYSTEM_DATA_VERSION | 字串非空 |
+| SD-04 | 每個系統模板封面 | `imageUrl` 為本機 JPEG 且檔案存在 |
 
 ### 3.4 其餘（helpers、merge、storage、useKeyboardShortcuts）— 沿用
 

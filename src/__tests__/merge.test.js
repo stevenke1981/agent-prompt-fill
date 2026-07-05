@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { mergeTemplatesWithSystem, mergeBanksWithSystem, needsSystemDataSync } from '../utils/merge';
-import { INITIAL_TEMPLATES_CONFIG } from '../data/templates';
+import { INITIAL_TEMPLATES_CONFIG, SYSTEM_DATA_VERSION } from '../data/templates';
 
 describe('merge', () => {
   it('MG-01: mergeTemplates preserves selections', () => {
@@ -72,8 +72,28 @@ describe('merge', () => {
 
   it('MG-06: needsSystemDataSync detects missing system templates', () => {
     const partial = INITIAL_TEMPLATES_CONFIG.slice(0, 5);
-    expect(needsSystemDataSync(partial, '1.1.1')).toBe(true);
-    expect(needsSystemDataSync(INITIAL_TEMPLATES_CONFIG, '1.1.1')).toBe(false);
+    expect(needsSystemDataSync(partial, SYSTEM_DATA_VERSION)).toBe(true);
+    expect(needsSystemDataSync(INITIAL_TEMPLATES_CONFIG, SYSTEM_DATA_VERSION)).toBe(false);
+  });
+
+  it('MG-07: mergeTemplates preserves user cover images during system updates', () => {
+    const systemTemplate = INITIAL_TEMPLATES_CONFIG[0];
+    const current = [
+      {
+        ...systemTemplate,
+        imageUrl: 'data:image/jpeg;base64,user-cover',
+        imageUrls: ['data:image/jpeg;base64,user-cover', 'https://example.com/second.jpg'],
+      },
+    ];
+
+    const { templates } = mergeTemplatesWithSystem(current, { backupSuffix: ' (backup)' });
+    const merged = templates.find((template) => template.id === systemTemplate.id);
+
+    expect(merged.imageUrl).toBe('data:image/jpeg;base64,user-cover');
+    expect(merged.imageUrls).toEqual([
+      'data:image/jpeg;base64,user-cover',
+      'https://example.com/second.jpg',
+    ]);
   });
 
   it('MG-05: mergeBanks keeps new custom bank', () => {
