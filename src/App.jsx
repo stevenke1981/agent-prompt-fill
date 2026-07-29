@@ -20,6 +20,7 @@ import {
   Download,
   Upload,
   Image as ImageIcon,
+  ImageDown,
   List,
   Undo,
   Redo,
@@ -40,7 +41,6 @@ import {
   Moon,
   Monitor,
 } from 'lucide-react';
-import html2canvas from 'html2canvas';
 import LZString from 'lz-string';
 
 // ====== 匯入資料設定 ======
@@ -1691,15 +1691,70 @@ const App = () => {
         templateLanguage
       );
 
-      // URL 編碼提示詞
-      const encodedPrompt = encodeURIComponent(cleanText);
+      // 動態載入 html2canvas，使其成為獨立 chunk，不計入主 bundle
+      const { default: html2canvas } = await import('html2canvas');
 
-      // 開啟 Gemini 網頁
-      const geminiUrl = `https://gemini.google.com/app#autoSubmit=false&pasteImage=1&tool=image&prompt=${encodedPrompt}`;
-      window.open(geminiUrl, '_blank');
+      // 建立離屏容器渲染解析後的提示詞，全程本機處理，不向任何第三方傳送資料
+      const container = document.createElement('div');
+      container.style.cssText = [
+        'position:fixed',
+        'left:-10000px',
+        'top:0',
+        'width:800px',
+        'padding:48px',
+        'background:#ffffff',
+        'color:#1f2937',
+        'box-sizing:border-box',
+        'font-family:"Noto Sans TC",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
+      ].join(';');
 
+      const header = document.createElement('div');
+      header.textContent = getLocalized(activeTemplate.name, templateLanguage) || 'Agent Prompt';
+      header.style.cssText =
+        'font-size:24px;font-weight:700;line-height:1.4;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #f59e0b;word-break:break-word;';
+
+      const body = document.createElement('div');
+      body.textContent = cleanText;
+      body.style.cssText =
+        'font-size:16px;line-height:1.75;white-space:pre-wrap;word-break:break-word;';
+
+      container.appendChild(header);
+      container.appendChild(body);
+      document.body.appendChild(container);
+
+      let canvas;
+      try {
+        canvas = await html2canvas(container, {
+          scale: 2,
+          backgroundColor: '#ffffff',
+          useCORS: true,
+        });
+      } finally {
+        document.body.removeChild(container);
+      }
+
+      // 使用 toBlob 而非 toDataURL，避免長圖產生大型 base64 字串造成記憶體峰值
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+      if (!blob) {
+        throw new Error('canvas.toBlob returned null');
+      }
+
+      const safeName = (getLocalized(activeTemplate.name, templateLanguage) || 'prompt')
+        .replace(/[^\w\u4e00-\u9fa5-]+/g, '_')
+        .replace(/^_+|_+$/g, '') || 'prompt';
+
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = `${safeName}.jpg`;
+      link.click();
+      // 待下載啟動後再釋放，避免過早 revoke 導致下載失敗
+      setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+
+      addToast(t('export_image_success') || '長圖已下載', 'success');
     } catch (err) {
-      console.error('Failed to open Gemini:', err);
+      console.error('Failed to export image:', err);
+      addToast(t('export_image_failed') || '匯出長圖失敗', 'error');
     } finally {
       setIsExporting(false);
     }
@@ -1976,7 +2031,11 @@ const App = () => {
                     title={isExporting ? t('exporting') : t('export_image')}
                     color="orange"
                   >
-                    <img src="./gemini.svg" alt="Gemini" className="w-4 h-4 flex-shrink-0" />
+                    {isExporting ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : (
+                      <ImageDown size={16} />
+                    )}
                   </PremiumButton>
                   {isShareMode ? (
                     <PremiumButton

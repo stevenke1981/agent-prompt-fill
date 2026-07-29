@@ -31,5 +31,13 @@ export default defineConfig({
     minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
     // 為調試建構生成源代碼映射
     sourcemap: !!process.env.TAURI_DEBUG,
+    rollupOptions: {
+      output: {
+        // 將穩定的核心 vendor 拆為獨立 chunk，增進瀏覽器快取命中率並避免單一 chunk 過大
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+        },
+      },
+    },
   },
 })
